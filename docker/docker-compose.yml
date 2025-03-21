@@ -1,0 +1,31 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    volumes:
+      - project-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: application
+      POSTGRES_DB: application
+    ports:
+      - 5432:5432
+  app:
+    build: .
+    volumes:
+      - ../:/var/www/html/app
+    ports:
+      - '8000:8000'
+    depends_on:
+      - database
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025"
+      - "8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+volumes:
+  project-data:
