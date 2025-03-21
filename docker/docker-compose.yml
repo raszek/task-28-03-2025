@@ -1,14 +1,15 @@
 services:
   database:
-    image: postgres
+    image: mysql
     restart: always
     volumes:
       - project-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      POSTGRES_PASSWORD: example
-      POSTGRES_USER: application
-      POSTGRES_DB: application
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_PASSWORD: example
+      MYSQL_USER: application
+      MYSQL_DB: application
     ports:
       - 5432:5432
   app:
