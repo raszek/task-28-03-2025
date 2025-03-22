@@ -22,8 +22,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install symfony cli
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
 
 RUN docker-php-ext-install gd zip bcmath intl
 
