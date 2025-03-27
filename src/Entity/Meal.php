@@ -117,6 +117,20 @@ class Meal
         return $this->tags;
     }
 
+    public function showTags(): string
+    {
+        $tags = $this->getTags()->map(fn (Tag $tag) => $tag->getName())->toArray();
+
+        return implode(', ', $tags);
+    }
+
+    public function showIngredients(): string
+    {
+        $ingredients = $this->getIngredients()->map(fn (MealIngredient $ingredient) => $ingredient->getName())->toArray();
+
+        return implode(', ', $ingredients);
+    }
+
     public function addTag(Tag $tag): void
     {
         if (!$this->tags->contains($tag)) {

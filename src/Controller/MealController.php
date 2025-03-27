@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\SearchMealForm;
+use App\Entity\Meal;
 use App\Form\SearchMealType;
 use App\Service\Meal\MealService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,6 +37,14 @@ final class MealController extends AbstractController
         return $this->render('meal/index.html.twig', [
             'meals' => $meals,
             'searchForm' => $searchForm
+        ]);
+    }
+
+    #[Route('/meals/{id}', name: 'app_meal_view')]
+    public function view(Meal $meal): Response
+    {
+        return $this->render('meal/view.html.twig', [
+            'meal' => $meal
         ]);
     }
 }

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Meal{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ meal.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Category: {{ meal.category }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Tags: {{ meal.showTags }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Ingredients: {{ meal.showIngredients }}</h6>
+                <p class="card-text">{{ meal.instructions }}</p>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

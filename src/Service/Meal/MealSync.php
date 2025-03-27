@@ -32,11 +32,8 @@ class MealSync
 
         $mealIdsToFetch = array_diff($mealIds, $existingMealIds);
 
-        $overallCount = count($mealIdsToFetch);
         foreach ($mealIdsToFetch as $i => $mealId) {
             $mealDetails = $this->mealApi->getMealDetails($mealId);
-            echo sprintf('Progress %d/%d'.PHP_EOL, $i, $overallCount);
-            echo sprintf('Adding meal "%s" with id [%d]'.PHP_EOL, $mealDetails->title, $mealDetails->id);
 
             $meal = new Meal(
                 title: $mealDetails->title,
@@ -71,7 +68,6 @@ class MealSync
                 $this->cachedTags = [];
             }
 
-            echo 'Added meal ' . $mealDetails->title . PHP_EOL;
             sleep(2);
         }
 

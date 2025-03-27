@@ -4,6 +4,8 @@ namespace App\Tests\Controller;
 
 
 use App\Factory\MealFactory;
+use App\Factory\MealIngredientFactory;
+use App\Factory\TagFactory;
 
 class MealControllerTest extends WebTestCase
 {
@@ -58,5 +60,47 @@ class MealControllerTest extends WebTestCase
 
         $this->assertTrue(str_contains($crawler->text(), 'Teriyaki Chicken Casserole'));
         $this->assertFalse(str_contains($crawler->text(), 'Beef Asado'));
+    }
+
+    /** @test */
+    public function user_can_view_meal_details()
+    {
+        $client = static::createClient();
+        $client->followRedirects();
+
+        $meatTag = TagFactory::createOne([
+            'name' => 'Meat',
+        ]);
+
+        $pieTag = TagFactory::createOne([
+            'name' => 'Pie',
+        ]);
+
+        $meal = MealFactory::createOne([
+            'title' => 'Teriyaki Chicken Casserole',
+            'category' => 'Chicken',
+            'instructions' => 'Some instructions',
+            'tags' => [$meatTag, $pieTag]
+        ]);
+
+        MealIngredientFactory::createOne([
+            'name' => 'Beef',
+            'meal' => $meal,
+        ]);
+
+        MealIngredientFactory::createOne([
+            'name' => 'Plain Flour',
+            'meal' => $meal,
+        ]);
+
+        $crawler = $client->request('GET', '/meals/'.$meal->getId());
+
+        $this->assertResponseIsSuccessful();
+
+        $this->assertTrue(str_contains($crawler->text(), 'Teriyaki Chicken Casserole'));
+        $this->assertTrue(str_contains($crawler->text(), 'Tags: Meat, Pie'));
+        $this->assertTrue(str_contains($crawler->text(), 'Category: Chicken'));
+        $this->assertTrue(str_contains($crawler->text(), 'Some instructions'));
+        $this->assertTrue(str_contains($crawler->text(), 'Ingredients: Beef, Plain Flour'));
     }
 }

@@ -23,7 +23,9 @@
             {% for meal in meals %}
                 <li class="list-group-item d-flex align-items-center justify-content-start">
                     <img src="{{ meal.thumbUrl }}" style="width: 5%;" alt="">
-                    <a href="#" class="ms-2">{{ meal.title }}</a>
+                    <a href="{{ path('app_meal_view', {
+                        id: meal.id
+                    }) }}" class="ms-2">{{ meal.title }}</a>
                 </li>
             {% endfor %}
         </ul>
