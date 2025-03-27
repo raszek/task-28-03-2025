@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
+use App\Form\SearchMealForm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -33,6 +35,22 @@ class MealRepository extends ServiceEntityRepository
         $records = $query->getArrayResult();
 
         return array_column($records, 'externalId');
+    }
+
+    public function listQuery(?SearchMealForm $form): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('meal');
+
+        if (!$form) {
+            return $queryBuilder;
+        }
+
+        if ($form->search) {
+            $queryBuilder->andWhere('LOWER(meal.title) LIKE :search');
+            $queryBuilder->setParameter('search', '%' . mb_strtolower($form->search) . '%');
+        }
+
+        return $queryBuilder;
     }
 
 }

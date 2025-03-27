@@ -28,7 +28,7 @@ class Meal
     #[ORM\Column(length: 255)]
     private ?string $thumbUrl = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 10, unique: true)]
     private ?string $externalId = null;
 
     /**
