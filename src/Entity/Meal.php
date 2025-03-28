@@ -43,6 +43,12 @@ class Meal
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     private Collection $tags;
 
+    /**
+     * @var Collection<int, MealComment>
+     */
+    #[ORM\OneToMany(targetEntity: MealComment::class, mappedBy: 'meal')]
+    private Collection $comments;
+
     public function __construct(
         string $title,
         string $category,
@@ -57,6 +63,7 @@ class Meal
         $this->externalId = $externalId;
         $this->ingredients = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,14 +126,18 @@ class Meal
 
     public function showTags(): string
     {
-        $tags = $this->getTags()->map(fn (Tag $tag) => $tag->getName())->toArray();
+        $tags = $this->getTags()
+            ->map(fn (Tag $tag) => $tag->getName())
+            ->toArray();
 
         return implode(', ', $tags);
     }
 
     public function showIngredients(): string
     {
-        $ingredients = $this->getIngredients()->map(fn (MealIngredient $ingredient) => $ingredient->getName())->toArray();
+        $ingredients = $this->getIngredients()
+            ->map(fn (MealIngredient $ingredient) => $ingredient->getName())
+            ->toArray();
 
         return implode(', ', $ingredients);
     }
@@ -141,6 +152,26 @@ class Meal
     public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return Collection<int, MealComment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addMealComment(MealComment $mealComment): void
+    {
+        if (!$this->comments->contains($mealComment)) {
+            $this->comments->add($mealComment);
+        }
+    }
+
+    public function removeComment(MealComment $mealComment): void
+    {
+        $this->comments->removeElement($mealComment);
     }
 
 }
