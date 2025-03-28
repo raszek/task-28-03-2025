@@ -9,7 +9,8 @@ class SearchMealForm
 
     public function __construct(
         #[Length(max: 255)]
-        public ?string $search = null
+        public ?string $search = null,
+        public array $ids = [],
     ) {
     }
 

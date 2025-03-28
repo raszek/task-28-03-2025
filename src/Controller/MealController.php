@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Meal;
 use App\Form\CommentType;
+use App\Form\SearchMealForm;
 use App\Form\SearchMealType;
 use App\Service\Meal\MealEditor\MealEditorFactory;
 use App\Service\Meal\MealService;
@@ -25,7 +26,9 @@ final class MealController extends AbstractController
     {
         $searchForm = $this->createForm(SearchMealType::class);
 
-        $searchFormData = null;
+        $searchFormData = new SearchMealForm(
+            ids: $this->getIds($request),
+        );
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $searchFormData = $searchForm->getData();
@@ -63,5 +66,16 @@ final class MealController extends AbstractController
             'commentForm' => $commentForm,
             'comments' => $comments,
         ]);
+    }
+
+    private function getIds(Request $request): array
+    {
+        $ids = $request->query->get('id');
+
+        if (!$ids) {
+            return [];
+        }
+
+        return explode(',', $ids);
     }
 }

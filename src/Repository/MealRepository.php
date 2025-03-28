@@ -50,6 +50,11 @@ class MealRepository extends ServiceEntityRepository
             $queryBuilder->setParameter('search', '%' . mb_strtolower($form->search) . '%');
         }
 
+        if ($form->ids) {
+            $queryBuilder->andWhere('meal.id IN (:ids)');
+            $queryBuilder->setParameter('ids', $form->ids);
+        }
+
         return $queryBuilder;
     }
 
