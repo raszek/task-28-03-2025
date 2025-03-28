@@ -6,12 +6,13 @@ use App\Factory\MealFactory;
 use App\Factory\TagFactory;
 use App\Repository\MealRepository;
 use App\Repository\TagRepository;
-use App\Service\Meal\MealSync;
+use App\Service\Meal\MealSync\MealSync;
 use App\Service\MealApi\Category;
 use App\Service\MealApi\MealApi;
 use App\Service\MealApi\MealDetails;
 use App\Tests\KernelTestCase;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MealSyncTest extends KernelTestCase
 {
@@ -75,10 +76,11 @@ class MealSyncTest extends KernelTestCase
         ]);
 
         $mealSync = new MealSync(
-            $apiMock,
-            $this->getService(EntityManagerInterface::class),
-            $this->getService(MealRepository::class),
-            $this->getService(TagRepository::class),
+            output: $this->createMock(OutputInterface::class),
+            mealApi: $apiMock,
+            entityManager: $this->getService(EntityManagerInterface::class),
+            mealRepository: $this->getService(MealRepository::class),
+            tagRepository: $this->getService(TagRepository::class),
         );
 
         $mealSync->execute();

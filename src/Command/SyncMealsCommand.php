@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Service\Meal\MealSync;
+use App\Service\Meal\MealSync\MealSync;
+use App\Service\Meal\MealSync\MealSyncFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,14 +16,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncMealsCommand extends Command
 {
     public function __construct(
-        private readonly MealSync $mealSync,
+        private readonly MealSyncFactory $mealSyncFactory,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->mealSync->execute();
+        $mealSync = $this->mealSyncFactory->create($output);
+
+        $mealSync->execute();
 
         return Command::SUCCESS;
     }

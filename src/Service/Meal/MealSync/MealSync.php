@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Meal;
+namespace App\Service\Meal\MealSync;
 
 use App\Entity\Meal;
 use App\Entity\MealIngredient;
@@ -10,6 +10,7 @@ use App\Repository\TagRepository;
 use App\Service\MealApi\MealApi;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MealSync
 {
@@ -17,6 +18,7 @@ class MealSync
     private array $cachedTags = [];
 
     public function __construct(
+        private readonly OutputInterface $output,
         private readonly MealApi $mealApi,
         private readonly EntityManagerInterface $entityManager,
         private readonly MealRepository $mealRepository,
@@ -32,7 +34,9 @@ class MealSync
 
         $mealIdsToFetch = array_diff($mealIds, $existingMealIds);
 
+        $overallCount = count($mealIdsToFetch);
         foreach ($mealIdsToFetch as $i => $mealId) {
+            $this->output->writeln(sprintf('%d/%d fetched. Fetching id: %s', $i, $overallCount, $mealId));
             $mealDetails = $this->mealApi->getMealDetails($mealId);
 
             $meal = new Meal(
