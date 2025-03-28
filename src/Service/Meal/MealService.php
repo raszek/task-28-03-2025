@@ -21,7 +21,7 @@ readonly class MealService
     ) {
     }
 
-    public function list(?SearchMealForm $filters, int $page): PaginationInterface
+    public function list(SearchMealForm $filters, int $page): PaginationInterface
     {
         $query = $this->mealRepository->listQuery($filters);
 

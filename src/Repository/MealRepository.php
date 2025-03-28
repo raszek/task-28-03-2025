@@ -37,13 +37,9 @@ class MealRepository extends ServiceEntityRepository
         return array_column($records, 'externalId');
     }
 
-    public function listQuery(?SearchMealForm $form): QueryBuilder
+    public function listQuery(SearchMealForm $form): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('meal');
-
-        if (!$form) {
-            return $queryBuilder;
-        }
 
         if ($form->search) {
             $queryBuilder->andWhere('LOWER(meal.title) LIKE :search');
