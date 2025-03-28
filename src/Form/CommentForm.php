@@ -11,7 +11,10 @@ class CommentForm
     public function __construct(
         #[NotBlank]
         #[Length(max: 2048)]
-        public ?string $content = null
+        public ?string $content = null,
+        #[NotBlank]
+        #[Length(max: 256)]
+        public ?string $username = null
     ) {
     }
 

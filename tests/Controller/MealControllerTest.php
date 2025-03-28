@@ -141,11 +141,13 @@ class MealControllerTest extends WebTestCase
         $form = $crawler->selectButton('Add comment')->form();
 
         $submitCrawler = $client->submit($form, [
-            'comment[content]' => 'Some comment content'
+            'comment[content]' => 'Some comment content',
+            'comment[username]' => 'Donek',
         ]);
 
         $this->assertResponseIsSuccessful();
 
+        $this->assertTrue(str_contains($submitCrawler->text(), 'Donek'));
         $this->assertTrue(str_contains($submitCrawler->text(), 'Some comment content'));
 
         $createdComment = $this->mealCommentRepository()->findOneBy([
@@ -154,6 +156,7 @@ class MealControllerTest extends WebTestCase
         ]);
 
         $this->assertNotNull($createdComment);
+        $this->assertEquals('Donek', $createdComment->getUsername());
     }
 
     private function mealCommentRepository(): MealCommentRepository

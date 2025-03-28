@@ -20,9 +20,10 @@ readonly class MealEditor
     public function addComment(CommentForm $form): void
     {
         $mealComment = new MealComment(
-            $form->content,
-            $this->clock->now(),
-            $this->meal
+            username: $form->username,
+            content: $form->content,
+            createdAt: $this->clock->now(),
+            meal: $this->meal
         );
 
         $this->entityManager->persist($mealComment);

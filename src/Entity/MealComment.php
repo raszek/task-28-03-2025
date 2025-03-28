@@ -15,6 +15,9 @@ class MealComment
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $username;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
@@ -26,6 +29,7 @@ class MealComment
     private ?Meal $meal = null;
 
     public function __construct(
+        string $username,
         string $content,
         DateTimeImmutable $createdAt,
         Meal $meal
@@ -33,6 +37,7 @@ class MealComment
         $this->content = $content;
         $this->createdAt = $createdAt;
         $this->meal = $meal;
+        $this->username = $username;
     }
 
     public function getId(): ?int
@@ -53,5 +58,10 @@ class MealComment
     public function getMeal(): ?Meal
     {
         return $this->meal;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
     }
 }
